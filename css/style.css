@@ -42,4 +42,8 @@ img {
 
 .active {
   display: none;
+}
+
+.pair {
+  visibility: hidden;
 }/*# sourceMappingURL=style.css.map */

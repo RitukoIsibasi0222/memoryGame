@@ -62,12 +62,21 @@ function shuffle() {
 shuffle();
 
 // trumpBackがクリックされたらクリックされたtrumpBackに.activeを追加する
-trumpBack.forEach((back, index) => {
-  back.addEventListener("click", () => {
-    if (turnOver.length < 2) {
-      back.classList.add("active");
-      turnOver.push(trumpFront[index]);
-      console.log(trumpFront[index] + " turnOver");
-    }
+
+function addAvtive() {
+  trumpBack.forEach((back, index) => {
+    back.addEventListener("click", () => {
+      if (turnOver.length < 2) {
+        back.classList.add("active");
+        turnOver.push(trumpFront[index]);
+        console.log(trumpFront[index] + " turnOver");
+      }
+    });
   });
-});
+} 
+addAvtive();
+
+
+
+
+

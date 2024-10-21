@@ -6,8 +6,14 @@ const cardMark = ["card_club", "card_diamond", "card_heart", "card_spade"];
 const cardNumber = ["_01", "_02", "_03", "_04", "_05", "_06", "_07", "_08", "_09", "_10", "_11", "_12", "_13"];
 let frontCard = [];
 let turnOverIndex = [];
+let turnOverName = [];
 let playerCount = 0;
 let player = 1;
+let temporary = [];
+let pair = [];
+let getPair = 0;
+let passing = 0;
+
 
 // trump内にdiv.trump__setを52回繰り返して表示をする
 function createTrump() {
@@ -67,44 +73,64 @@ shuffle();
 // trumpBackがクリックされた後の処理
 trumpBack.forEach((back, index) => {
   back.addEventListener("click", () => {
-
-    // クリックをしたカードに.activeを追加する
     function addActive() {
       if (turnOver.length < 2) {
         turnOver.push(trumpFront[index]);
         // クリックをしたカードに.activeを追加する
         back.classList.add("active");
+        // console.log(turnOver);
 
         // カードの数字を格納
         turnOverIndex.push(trumpFront[index].slice(-2));
-        console.log(turnOverIndex);
+        temporary.push(trumpFront[index]);
+        // console.log(temporary + "temporary");
+        // console.log(turnOverName + "turnOverName");     
+        // console.log(turnOverIndex);
       }
     }
     addActive();
 
     function compareCard() {
+      // トランプの数字が同じだった時の処理
       if (turnOverIndex.length === 2) {
         if (turnOverIndex[0] === turnOverIndex[1]) {
           playerCount++;
+          // pairにtemporaryの最後から２つの配列を追加する
+          pair.push(temporary.slice(-2));
+          console.log(pair + "pair");
+          getPair = 1; //ペアを持っている
 
+          // トランプをめくれるように初期化
           turnOver.length = 0;
           turnOverIndex.length = 0;
-          console.log(playerCount + "playerCount");
+          // console.log(playerCount + "playerCount");
         } else {
-          trumpBack.forEach((back) => {
+          trumpBack.forEach((back) => {   
             back.classList.remove("active");
             player = 0;
-
+            passing = 1; //ミスをした
             // playerが0だったらturnOverを初期化する
             if (player === 0) {
               turnOver.length = 0;
               turnOverIndex.length = 0;
             }
-          
           });
         }
       }
     }
     setTimeout(compareCard, 3000);
+
+    // ペアのトランプを見えなくする
+    // function cardhiddeen() {
+    //   if(getPair == 1){
+    //     // turnOverに追加をする
+    //     turnOver.push(trumpFront[index])
+    //     console.log(turnOver);
+
+      
+        
+    //   }
+    // }
+    // cardhiddeen();
   });
 });

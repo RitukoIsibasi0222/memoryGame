@@ -5,6 +5,7 @@ const turnOver = []; // クリックされたカードを格納する配列
 const cardMark = ["card_club", "card_diamond", "card_heart", "card_spade"];
 const cardNumber = ["_01", "_02", "_03", "_04", "_05", "_06", "_07", "_08", "_09", "_10", "_11", "_12", "_13"];
 let frontCard = [];
+let frontCardImages = [];
 let turnOverIndex = [];
 let turnOverName = [];
 let playerCount = 0;
@@ -29,6 +30,9 @@ function createTrump() {
     imgBack.classList.add("trump__back");
     trumpSet.appendChild(imgBack);
     trumpBack.push(imgBack);
+
+    frontCardImages.push(imgFront);
+    // console.log(frontCardImages);
 
     // cardMarkとcardNumberを組み合わせてfrontCardにする
     const mark = cardMark[Math.floor(i / 13)];
@@ -72,7 +76,7 @@ trumpBack.forEach((back, index) => {
         turnOver.push(trumpFront[index]);
         // クリックをしたカードに.activeを追加する
         back.classList.add("active");
-        // console.log(turnOver);
+        console.log(turnOver);
 
         // カードの数字を格納
         turnOverIndex.push(trumpFront[index].slice(-2));
@@ -94,18 +98,17 @@ trumpBack.forEach((back, index) => {
           // getPair = 1; //ペアを持っている
 
           pair.forEach((pair) => {
-            // console.log(pair);
+            console.log(pair);
             trumpFront.forEach((front, index) => {
               if (front === pair[0] || front === pair[1]) {
                 // .get-pairを追加する
                 trumpBack[index].classList.add("get-pair");
-                // trumpBack[index].style.display = "none";
+
+                // frontCardImages[index].classList.add("get-pair-opaque");
               }
-
             });
-          });
+          }); 
 
-   
           // トランプをめくれるように初期化
           turnOver.length = 0;
           turnOverIndex.length = 0;
@@ -116,10 +119,26 @@ trumpBack.forEach((back, index) => {
           setTimeout(() => {
             removeActive()
           }, 3000);
+
+          setTimeout(() => {
+            opaque();
+          } , 3000);
         }
       }
     }
     compareCard();
+
+  
+function opaque() {
+  pair.forEach((pair) => {
+    console.log(pair);
+    trumpFront.forEach((front, index) => {
+      if (front === pair[0] || front === pair[1]) {
+        frontCardImages[index].classList.add("get-pair-opaque");
+      }
+    });
+  });
+}
 
     function removeActive() {
       trumpBack.forEach((back) => {
@@ -131,6 +150,7 @@ trumpBack.forEach((back, index) => {
         turnOverIndex.length = 0;        
       });
     }
+
 
     function count() {
       let turnCount = 0;

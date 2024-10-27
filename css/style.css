@@ -39,6 +39,11 @@ img {
   width: 100%;
   z-index: -1;
 }
+.trump__set {
+  display: block;
+  min-width: 100px;
+  aspect-ratio: 409/600;
+}
 
 .active {
   display: none;
@@ -46,4 +51,27 @@ img {
 
 .pair {
   visibility: hidden;
+}
+
+p {
+  font-size: 1.2rem;
+}
+
+.cont-conteiner {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-column-gap: 100px;
+     -moz-column-gap: 100px;
+          column-gap: 100px;
+  margin: 20px 0;
+}
+
+.reset {
+  cursor: pointer;
+  padding: 0 2rem;
+}
+
+.get-pair {
+  display: none;
 }/*# sourceMappingURL=style.css.map */

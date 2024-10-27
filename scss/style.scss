@@ -40,16 +40,37 @@ img {
         width: 100%;
         z-index: -1;
     }
+
+    &__set {
+        display: block;
+        min-width: 100px;
+        aspect-ratio: 409 / 600;
+    }
 }
 
 .active {
     display: none;
 }
 
-.trump__back {
-    // display: none;
-}
-
 .pair {
     visibility: hidden;
+}
+
+p {
+    font-size: 1.2rem;
+}
+
+.cont-conteiner {
+    display: flex;
+    column-gap: 100px;
+    margin: 20px 0;
+}
+
+.reset {
+    cursor: pointer;
+    padding: 0 2rem;
+}
+
+.get-pair {
+    display: none;
 }

@@ -107,7 +107,7 @@ trumpBack.forEach((back, index) => {
                 // frontCardImages[index].classList.add("get-pair-opaque");
               }
             });
-          }); 
+          });
 
           // トランプをめくれるように初期化
           turnOver.length = 0;
@@ -117,40 +117,38 @@ trumpBack.forEach((back, index) => {
           console.log(playerCount + "playerCount");
         } else if (turnOverIndex[0] !== turnOverIndex[1]) {
           setTimeout(() => {
-            removeActive()
+            removeActive();
           }, 3000);
 
           setTimeout(() => {
             opaque();
-          } , 3000);
+          }, 3000);
         }
       }
     }
     compareCard();
 
-  
-function opaque() {
-  pair.forEach((pair) => {
-    console.log(pair);
-    trumpFront.forEach((front, index) => {
-      if (front === pair[0] || front === pair[1]) {
-        frontCardImages[index].classList.add("get-pair-opaque");
-      }
-    });
-  });
-}
+    function opaque() {
+      pair.forEach((pair) => {
+        console.log(pair);
+        trumpFront.forEach((front, index) => {
+          if (front === pair[0] || front === pair[1]) {
+            frontCardImages[index].classList.add("get-pair-opaque");
+          }
+        });
+      });
+    }
 
     function removeActive() {
       trumpBack.forEach((back) => {
         back.classList.remove("active");
-        player = 0;
+        // player = 0;
         // passing = 1; //ミスをした
         // トランプをめくれるように初期化
         turnOver.length = 0;
-        turnOverIndex.length = 0;        
+        turnOverIndex.length = 0;
       });
     }
-
 
     function count() {
       let turnCount = 0;
@@ -161,10 +159,48 @@ function opaque() {
       }
     }
     count();
+
+    if (playerCount === 26) {
+      document.getElementById("result").textContent = "終了です！";
+    }
   });
 });
 
 // resetボタンを押したらページをリロードする
+// document.getElementById("reset").addEventListener("click", () => {
+//   window.location.reload();
+// });
+
+// リセットボタンを押したら初期化する
 document.getElementById("reset").addEventListener("click", () => {
-  window.location.reload();
+  trumpBack.forEach((back) => {
+    back.classList.remove("active");
+    back.classList.remove("get-pair");
+  });
+
+  frontCardImages.forEach((front) => {
+    front.classList.remove("get-pair-opaque");
+  });
+
+  playerCount = 0;
+  document.getElementById("player-count").textContent = `${playerCount}`;
+  document.getElementById("count").textContent = "0";
+  document.getElementById("result").textContent = "";
+
+  let deleteTrump = document.querySelectorAll(".trump__set");
+  deleteTrump.forEach((trump) => {
+    trump.remove();
+  });
+
+  frontCard = [];
+  frontCardImages = [];
+  turnOverIndex = [];
+  turnOverName = [];
+  playerCount = 0;
+  player = 1;
+  temporary = [];
+  pair = [];
+
+  createTrump();
+  shuffle();
 });

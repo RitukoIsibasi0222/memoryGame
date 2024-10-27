@@ -74,4 +74,7 @@ p {
 
 .get-pair {
   display: none;
+}
+.get-pair__img {
+  opacity: 0.4;
 }/*# sourceMappingURL=style.css.map */

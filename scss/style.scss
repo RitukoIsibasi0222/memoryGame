@@ -73,4 +73,8 @@ p {
 
 .get-pair {
     display: none;
+
+    &__img {
+        opacity: .4;
+    }
 }

@@ -101,36 +101,28 @@ trumpBack.forEach((back, index) => {
                 trumpBack[index].classList.add("get-pair");
                 // trumpBack[index].style.display = "none";
               }
-
             });
           });
 
-   
           // トランプをめくれるように初期化
           turnOver.length = 0;
           turnOverIndex.length = 0;
-
-          document.getElementById("player-count").textContent = `${playerCount}`;
-          console.log(playerCount + "playerCount");
-        } else if (turnOverIndex[0] !== turnOverIndex[1]) {
+          // console.log(playerCount + "playerCount");
+        } else if (turnOverIndex[0] !== turnOverIndex[1]) { 
           setTimeout(() => {
-            removeActive()
+            trumpBack.forEach((back) => {
+              back.classList.remove("active");
+              player = 0;
+              // passing = 1; //ミスをした
+              // トランプをめくれるように初期化
+              turnOver.length = 0;
+              turnOverIndex.length = 0;            
+            });
           }, 3000);
         }
       }
     }
     compareCard();
-
-    function removeActive() {
-      trumpBack.forEach((back) => {
-        back.classList.remove("active");
-        player = 0;
-        // passing = 1; //ミスをした
-        // トランプをめくれるように初期化
-        turnOver.length = 0;
-        turnOverIndex.length = 0;        
-      });
-    }
 
     function count() {
       let turnCount = 0;

@@ -1,19 +1,15 @@
 const trump = document.getElementById("trump");
-let trumpBack = [];
-let trumpFront = [];
 const cardMark = ["card_club", "card_diamond", "card_heart", "card_spade"];
 const cardNumber = ["_01", "_02", "_03", "_04", "_05", "_06", "_07", "_08", "_09", "_10", "_11", "_12", "_13"];
-let turnOver = []; // クリックされたカードを格納する配列
-let frontCard = [];
+let trumpBack = []; // 裏面のカードを格納する配列(ウサギ柄)
+let trumpFront = []; // 表面のカードを格納する配列（数字とマーク）
 let frontCardImages = [];
-let turnOverIndex = [];
-let turnOverName = [];
-let playerCount = 0;
-let player = 1;
-let temporary = [];
+let turnOver = []; // めくったカードを格納する配列
+let frontCard = []; //数字とマークを一緒にしたカードをいったん格納する配列
+let turnOverIndex = []; // めくったカードの数字だけを格納する配列
+let playerCount = 0; // プレイヤーがめくった回数をカウントする(2枚で1回)
+let temporary = []; // activeの付与されたカードを格納する配列
 let pair = [];
-// let getPair = 0;
-// let passing = 1;
 
 // trump内にdiv.trump__setを52回繰り返して表示をする
 function createTrump() {
@@ -25,23 +21,21 @@ function createTrump() {
     div.classList.add("trump__set");
     const trumpSet = trump.appendChild(div);
 
-    // trumpSetの中にimgを2つ追加する
+    // trumpSetの中に表と裏のimgを追加する
     imgBack.src = "../image/card_back.png";
     imgBack.classList.add("trump__back");
     trumpSet.appendChild(imgBack);
     trumpBack.push(imgBack);
 
     frontCardImages.push(imgFront);
-    // console.log(frontCardImages);
 
     // cardMarkとcardNumberを組み合わせてfrontCardにする
     const mark = cardMark[Math.floor(i / 13)];
     const number = cardNumber[i % 13];
 
     frontCard = mark + number;
-    // frontCardをtrumpFrontに格納する
+    // frontCardをtrumpFrontに格納し52枚のトランプを作成する
     trumpFront.push(frontCard);
-
     imgFront.src = `../image/${frontCard}.png`;
 
     imgFront.classList.add("trump__front");
@@ -52,62 +46,50 @@ createTrump();
 
 // trumpFrontをシャッフルして再表示する
 function shuffle() {
-  console.log(trumpFront);
   for (let i = trumpFront.length - 1; i > 0; i--) {
     const r = Math.floor(Math.random() * (i + 1));
     const tmp = trumpFront[i];
     trumpFront[i] = trumpFront[r];
     trumpFront[r] = tmp;
-    // console.log(trumpFront[r]);
   }
-  // console.log(trumpFront);
   const trumps = document.querySelectorAll(".trump__front");
   trumps.forEach(function (trump, index) {
     trump.src = `../image/${trumpFront[index]}.png`;
-    console.log(trumpFront[index]);
   });
 }
 shuffle();
+console.log(trumpFront);
 
 // trumpBackがクリックされた後の処理
 function playGame() {
-  console.log(trumpBack);
   trumpBack.forEach((back, index) => {
     back.addEventListener("click", () => {
-      console.log(trumpFront[index]);
-      console.log("AAA");
       function addActive() {
         if (turnOver.length < 2) {
           turnOver.push(trumpFront[index]);
           // クリックをしたカードに.activeを追加する
           back.classList.add("active");
-          console.log(turnOver);
 
-          // カードの数字を格納
+          // クリックしたカードの数字を格納
           turnOverIndex.push(trumpFront[index].slice(-2));
+          // めくったカードをtemporaryに格納
           temporary.push(trumpFront[index]);
-          // console.log(turnOverName + "turnOverName");
-          console.log(turnOverIndex);
+          console.log(temporary);
         }
       }
       addActive();
 
       function compareCard() {
-        // トランプの数字が同じだった時の処理
-        console.log(turnOverIndex);
+        // ２枚めくれる
         if (turnOverIndex.length === 2) {
           if (turnOverIndex[0] === turnOverIndex[1]) {
             playerCount++;
-            // pairにtemporaryの最後から２つの配列を追加する
+            // pairにtemporary（めくったカード）の最後から２つの配列を追加してカードを比較
             pair.push(temporary.slice(-2));
-            console.log(pair + "pair");
-            // getPair = 1; //ペアを持っている
-
             pair.forEach((pair) => {
-              console.log(pair);
               trumpFront.forEach((front, index) => {
                 if (front === pair[0] || front === pair[1]) {
-                  // .get-pairを追加する
+                  // 数字が同じだったら.get-pairを付与
                   trumpBack[index].classList.add("get-pair");
                 }
               });
@@ -116,10 +98,10 @@ function playGame() {
             // トランプをめくれるように初期化
             turnOver.length = 0;
             turnOverIndex.length = 0;
-
+            // めくった回数をカウント
             document.getElementById("player-count").textContent = `${playerCount}`;
-            console.log(playerCount + "playerCount");
           } else if (turnOverIndex[0] !== turnOverIndex[1]) {
+            // トランプの数字が違った時の処理 activeを外して、3秒後に取得したペアを半透明にする
             setTimeout(() => {
               removeActive();
             }, 3000);
@@ -132,9 +114,9 @@ function playGame() {
       }
       compareCard();
 
+      // 一致したカードを半透明にする
       function opaque() {
         pair.forEach((pair) => {
-          console.log(pair);
           trumpFront.forEach((front, index) => {
             if (front === pair[0] || front === pair[1]) {
               frontCardImages[index].classList.add("get-pair-opaque");
@@ -146,24 +128,22 @@ function playGame() {
       function removeActive() {
         trumpBack.forEach((back) => {
           back.classList.remove("active");
-          // player = 0;
-          // passing = 1; //ミスをした
           // トランプをめくれるように初期化
           turnOver.length = 0;
           turnOverIndex.length = 0;
         });
       }
 
+      // ペアの数をカウント
       function count() {
         let turnCount = 0;
         turnCount = Math.floor(temporary.length / 2);
-        // console.log(turnCount + "turnCount");
         if (turnCount > 0) {
           document.getElementById("count").textContent = `${turnCount}`;
         }
       }
       count();
-
+      // 全てのカードをめくったら終了を表示
       if (playerCount === 26) {
         document.getElementById("result").textContent = "終了です！";
       }
@@ -172,12 +152,7 @@ function playGame() {
 }
 playGame();
 
-// resetボタンを押したらページをリロードする
-// document.getElementById("reset").addEventListener("click", () => {
-//   window.location.reload();
-// });
-
-// リセットボタンを押したら初期化する
+// リセットボタンを押したら全て初期化する
 document.getElementById("reset").addEventListener("click", () => {
   trumpBack.forEach((back) => {
     back.classList.remove("active");
@@ -202,14 +177,11 @@ document.getElementById("reset").addEventListener("click", () => {
   frontCard = [];
   frontCardImages = [];
   turnOverIndex = [];
-  turnOverName = [];
   playerCount = 0;
-  player = 1;
   temporary = [];
   pair = [];
- trumpFront = []; 
- trumpBack = [];
-
+  trumpFront = [];
+  trumpBack = [];
 
   createTrump();
   shuffle();

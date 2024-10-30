@@ -1,9 +1,9 @@
 const trump = document.getElementById("trump");
-const trumpBack = [];
-const trumpFront = [];
-const turnOver = []; // クリックされたカードを格納する配列
+let trumpBack = [];
+let trumpFront = [];
 const cardMark = ["card_club", "card_diamond", "card_heart", "card_spade"];
 const cardNumber = ["_01", "_02", "_03", "_04", "_05", "_06", "_07", "_08", "_09", "_10", "_11", "_12", "_13"];
+let turnOver = []; // クリックされたカードを格納する配列
 let frontCard = [];
 let frontCardImages = [];
 let turnOverIndex = [];
@@ -52,6 +52,7 @@ createTrump();
 
 // trumpFrontをシャッフルして再表示する
 function shuffle() {
+  console.log(trumpFront);
   for (let i = trumpFront.length - 1; i > 0; i--) {
     const r = Math.floor(Math.random() * (i + 1));
     const tmp = trumpFront[i];
@@ -69,102 +70,107 @@ function shuffle() {
 shuffle();
 
 // trumpBackがクリックされた後の処理
-trumpBack.forEach((back, index) => {
-  back.addEventListener("click", () => {
-    function addActive() {
-      if (turnOver.length < 2) {
-        turnOver.push(trumpFront[index]);
-        // クリックをしたカードに.activeを追加する
-        back.classList.add("active");
-        console.log(turnOver);
+function playGame() {
+  console.log(trumpBack);
+  trumpBack.forEach((back, index) => {
+    back.addEventListener("click", () => {
+      console.log(trumpFront[index]);
+      console.log("AAA");
+      function addActive() {
+        if (turnOver.length < 2) {
+          turnOver.push(trumpFront[index]);
+          // クリックをしたカードに.activeを追加する
+          back.classList.add("active");
+          console.log(turnOver);
 
-        // カードの数字を格納
-        turnOverIndex.push(trumpFront[index].slice(-2));
-        temporary.push(trumpFront[index]);
-        // console.log(turnOverName + "turnOverName");
-        // console.log(turnOverIndex);
+          // カードの数字を格納
+          turnOverIndex.push(trumpFront[index].slice(-2));
+          temporary.push(trumpFront[index]);
+          // console.log(turnOverName + "turnOverName");
+          console.log(turnOverIndex);
+        }
       }
-    }
-    addActive();
+      addActive();
 
-    function compareCard() {
-      // トランプの数字が同じだった時の処理
-      if (turnOverIndex.length === 2) {
-        if (turnOverIndex[0] === turnOverIndex[1]) {
-          playerCount++;
-          // pairにtemporaryの最後から２つの配列を追加する
-          pair.push(temporary.slice(-2));
-          console.log(pair + "pair");
-          // getPair = 1; //ペアを持っている
+      function compareCard() {
+        // トランプの数字が同じだった時の処理
+        console.log(turnOverIndex);
+        if (turnOverIndex.length === 2) {
+          if (turnOverIndex[0] === turnOverIndex[1]) {
+            playerCount++;
+            // pairにtemporaryの最後から２つの配列を追加する
+            pair.push(temporary.slice(-2));
+            console.log(pair + "pair");
+            // getPair = 1; //ペアを持っている
 
-          pair.forEach((pair) => {
-            console.log(pair);
-            trumpFront.forEach((front, index) => {
-              if (front === pair[0] || front === pair[1]) {
-                // .get-pairを追加する
-                trumpBack[index].classList.add("get-pair");
-
-                // frontCardImages[index].classList.add("get-pair-opaque");
-              }
+            pair.forEach((pair) => {
+              console.log(pair);
+              trumpFront.forEach((front, index) => {
+                if (front === pair[0] || front === pair[1]) {
+                  // .get-pairを追加する
+                  trumpBack[index].classList.add("get-pair");
+                }
+              });
             });
-          });
 
+            // トランプをめくれるように初期化
+            turnOver.length = 0;
+            turnOverIndex.length = 0;
+
+            document.getElementById("player-count").textContent = `${playerCount}`;
+            console.log(playerCount + "playerCount");
+          } else if (turnOverIndex[0] !== turnOverIndex[1]) {
+            setTimeout(() => {
+              removeActive();
+            }, 3000);
+
+            setTimeout(() => {
+              opaque();
+            }, 3000);
+          }
+        }
+      }
+      compareCard();
+
+      function opaque() {
+        pair.forEach((pair) => {
+          console.log(pair);
+          trumpFront.forEach((front, index) => {
+            if (front === pair[0] || front === pair[1]) {
+              frontCardImages[index].classList.add("get-pair-opaque");
+            }
+          });
+        });
+      }
+
+      function removeActive() {
+        trumpBack.forEach((back) => {
+          back.classList.remove("active");
+          // player = 0;
+          // passing = 1; //ミスをした
           // トランプをめくれるように初期化
           turnOver.length = 0;
           turnOverIndex.length = 0;
+        });
+      }
 
-          document.getElementById("player-count").textContent = `${playerCount}`;
-          console.log(playerCount + "playerCount");
-        } else if (turnOverIndex[0] !== turnOverIndex[1]) {
-          setTimeout(() => {
-            removeActive();
-          }, 3000);
-
-          setTimeout(() => {
-            opaque();
-          }, 3000);
+      function count() {
+        let turnCount = 0;
+        turnCount = Math.floor(temporary.length / 2);
+        // console.log(turnCount + "turnCount");
+        if (turnCount > 0) {
+          document.getElementById("count").textContent = `${turnCount}`;
         }
       }
-    }
-    compareCard();
+      count();
 
-    function opaque() {
-      pair.forEach((pair) => {
-        console.log(pair);
-        trumpFront.forEach((front, index) => {
-          if (front === pair[0] || front === pair[1]) {
-            frontCardImages[index].classList.add("get-pair-opaque");
-          }
-        });
-      });
-    }
-
-    function removeActive() {
-      trumpBack.forEach((back) => {
-        back.classList.remove("active");
-        // player = 0;
-        // passing = 1; //ミスをした
-        // トランプをめくれるように初期化
-        turnOver.length = 0;
-        turnOverIndex.length = 0;
-      });
-    }
-
-    function count() {
-      let turnCount = 0;
-      turnCount = Math.floor(temporary.length / 2);
-      // console.log(turnCount + "turnCount");
-      if (turnCount > 0) {
-        document.getElementById("count").textContent = `${turnCount}`;
+      if (playerCount === 26) {
+        document.getElementById("result").textContent = "終了です！";
       }
-    }
-    count();
-
-    if (playerCount === 26) {
-      document.getElementById("result").textContent = "終了です！";
-    }
+    });
   });
-});
+}
+playGame();
 
 // resetボタンを押したらページをリロードする
 // document.getElementById("reset").addEventListener("click", () => {
@@ -192,6 +198,7 @@ document.getElementById("reset").addEventListener("click", () => {
     trump.remove();
   });
 
+  turnOver = [];
   frontCard = [];
   frontCardImages = [];
   turnOverIndex = [];
@@ -200,7 +207,11 @@ document.getElementById("reset").addEventListener("click", () => {
   player = 1;
   temporary = [];
   pair = [];
+ trumpFront = []; 
+ trumpBack = [];
+
 
   createTrump();
   shuffle();
+  playGame();
 });

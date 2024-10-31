@@ -7,7 +7,7 @@ let frontCardImages = [];
 let turnOver = []; // めくったカードを格納する配列
 let frontCard = []; //数字とマークを一緒にしたカードをいったん格納する配列
 let turnOverIndex = []; // めくったカードの数字だけを格納する配列
-let playerCount = 0; // プレイヤーがめくった回数をカウントする(2枚で1回)
+let playerCount = 0; // プレイヤーがめくった回数をカウント
 let temporary = []; // activeの付与されたカードを格納する配列
 let pair = [];
 
@@ -67,14 +67,13 @@ function playGame() {
       function addActive() {
         if (turnOver.length < 2) {
           turnOver.push(trumpFront[index]);
-          // クリックをしたカードに.activeを追加する
+          // クリックをしたカードに.activeを付与
           back.classList.add("active");
-
           // クリックしたカードの数字を格納
           turnOverIndex.push(trumpFront[index].slice(-2));
           // めくったカードをtemporaryに格納
           temporary.push(trumpFront[index]);
-          console.log(temporary);
+          // console.log(temporary);
         }
       }
       addActive();
@@ -94,18 +93,17 @@ function playGame() {
                 }
               });
             });
-
-            // トランプをめくれるように初期化
+            // トランプをめくれるようにlengthを初期化
             turnOver.length = 0;
             turnOverIndex.length = 0;
             // めくった回数をカウント
             document.getElementById("player-count").textContent = `${playerCount}`;
           } else if (turnOverIndex[0] !== turnOverIndex[1]) {
-            // トランプの数字が違った時の処理 activeを外して、3秒後に取得したペアを半透明にする
+            // トランプの数字が違った時の処理 .activeを外す
             setTimeout(() => {
               removeActive();
             }, 3000);
-
+            // 取得したペアを半透明にする
             setTimeout(() => {
               opaque();
             }, 3000);
@@ -114,7 +112,7 @@ function playGame() {
       }
       compareCard();
 
-      // 一致したカードを半透明にする
+      // 一致したカードを半透明にするため.get-pair-opaqueを付与
       function opaque() {
         pair.forEach((pair) => {
           trumpFront.forEach((front, index) => {
@@ -128,7 +126,7 @@ function playGame() {
       function removeActive() {
         trumpBack.forEach((back) => {
           back.classList.remove("active");
-          // トランプをめくれるように初期化
+          // トランプをめくれるようにlengthを初期化
           turnOver.length = 0;
           turnOverIndex.length = 0;
         });
@@ -143,6 +141,7 @@ function playGame() {
         }
       }
       count();
+
       // 全てのカードをめくったら終了を表示
       if (playerCount === 26) {
         document.getElementById("result").textContent = "終了です！";

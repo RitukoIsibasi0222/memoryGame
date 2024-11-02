@@ -22,7 +22,7 @@ function createTrump() {
     const trumpSet = trump.appendChild(div);
 
     // trumpSetの中に表と裏のimgを追加する
-    imgBack.src = "../image/card_back.png";
+    imgBack.src = "./image/card_back.png";
     imgBack.classList.add("trump__back");
     trumpSet.appendChild(imgBack);
     trumpBack.push(imgBack);
@@ -36,7 +36,7 @@ function createTrump() {
     frontCard = mark + number;
     // frontCardをtrumpFrontに格納し52枚のトランプを作成する
     trumpFront.push(frontCard);
-    imgFront.src = `../image/${frontCard}.png`;
+    imgFront.src = `./image/${frontCard}.png`;
 
     imgFront.classList.add("trump__front");
     trumpSet.appendChild(imgFront);
@@ -54,7 +54,7 @@ function shuffle() {
   }
   const trumps = document.querySelectorAll(".trump__front");
   trumps.forEach(function (trump, index) {
-    trump.src = `../image/${trumpFront[index]}.png`;
+    trump.src = `./image/${trumpFront[index]}.png`;
   });
 }
 shuffle();

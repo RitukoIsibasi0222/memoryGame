@@ -55,6 +55,7 @@ function shuffle() {
   const trumps = document.querySelectorAll(".trump__front");
   trumps.forEach(function (trump, index) {
     trump.src = `./image/${trumpFront[index]}.png`;
+    trump.alt = `${trumpFront[index]}`;
   });
 }
 shuffle();
